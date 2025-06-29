@@ -30,7 +30,6 @@ dependencies {
 tasks {
 
     build {
-        dependsOn spotlessApply
         dependsOn shadowJar
     }
 
@@ -45,13 +44,12 @@ tasks {
 }
 
 bukkit {
-    name = "ArcaniaRewards"
-    version = "1.0-SNAPSHOT"
+    name = findProperty('plugin-name') ?: "null"
+    version = this.version
+    description = findProperty('plugin-description') ?: "null"
+    authors = ["Inmutable"]
     main = "git.inmutable.awrewards.Main"
     apiVersion = "1.20"
-
-    authors = ["Inmutable"]
-    description = "ArcaniaRewards"
     commands {
         register('rewards', {
             description = 'Open the rewards menu'
