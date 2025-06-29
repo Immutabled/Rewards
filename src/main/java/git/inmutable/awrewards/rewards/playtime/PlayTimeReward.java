@@ -1,0 +1,60 @@
+package git.inmutable.awrewards.rewards.playtime;
+
+import git.inmutable.awrewards.account.AccountInfo;
+import git.inmutable.awrewards.registry.AccountRegistry;
+import git.inmutable.awrewards.rewards.Reward;
+import lombok.NonNull;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+
+import java.util.*;
+
+/**
+ * @organization Arcania Projects
+ *
+ * @author Inmutable
+ * @since mayo 10, 09:38
+ */
+public record PlayTimeReward(@NonNull String displayName, @NonNull Material material,@NonNull Integer amount,
+                             @NonNull String permission, @NonNull Set<String> rewards,
+                             @NonNull Set<String> passRewards, @NonNull List<String> lockedLore,
+                             @NonNull List<String> availableLore,
+                             @NonNull Set<UUID> claimedPlayers,
+                             Set<UUID> claimedPassPlayers, Long time) implements Reward<PlayTimeReward> {
+
+
+    public static PlayTimeReward empty(Long required) {
+        return new PlayTimeReward(
+                "Example",
+                Material.CLOCK,
+                1,
+                "example.permission",
+                Collections.emptySet(),
+                Collections.emptySet(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                Collections.emptySet(),
+                Collections.emptySet(),
+                required
+        );
+    }
+
+    private Long getTimeRemaining(Player player) {
+        AccountRegistry accountRegistry = Bukkit.getServer()
+                .getServicesManager()
+                .load(AccountRegistry.class);
+
+        if (accountRegistry == null) {
+            throw new IllegalStateException("Account registry not loaded");
+        }
+
+        AccountInfo account = accountRegistry.getAccountsById().get(player.getUniqueId());
+
+        if (account == null) {
+            throw new IllegalStateException("Account not found");
+        }
+
+         return time - account.playtime();
+    }
+}

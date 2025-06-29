@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    alias libs.plugins.shadow
+    alias libs.plugins.bukkitPluginYAML
+}
+
+apply plugin: "java"
+
+group = this.rootProject.group
+version = this.rootProject.version
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.purpurmc.org/snapshots"
+    }
+    maven {
+        url = 'https://repo.extendedclip.com/releases/'
+    }
+}
+
+dependencies {
+    compileOnly "org.purpurmc.purpur:purpur-api:1.21-R0.1-SNAPSHOT"
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+
+    implementation libs.lombok.get()
+    annotationProcessor libs.lombok.get()
+}
+
+tasks {
+
+    build {
+        dependsOn spotlessApply
+        dependsOn shadowJar
+    }
+
+    shadowJar {
+        archiveFileName.set("${rootProject.name.toLowerCase()}.jar")
+    }
+
+    compileJava {
+        options.encoding = "UTF-8"
+        options.compilerArgs.add("-Xpkginfo:always")
+    }
+}
+
+bukkit {
+    name = "ArcaniaRewards"
+    version = "1.0-SNAPSHOT"
+    main = "git.inmutable.awrewards.Main"
+    apiVersion = "1.20"
+
+    authors = ["Inmutable"]
+    description = "ArcaniaRewards"
+    commands {
+        register('rewards', {
+            description = 'Open the rewards menu'
+            usage = '/rewards'
+            permission = 'arcania.rewards'
+            permissionMessage = 'You don’t have permission to use this command.'
+            aliases = ['calendar', 'rew']
+        })
+    }
+}

@@ -1,0 +1,8 @@
+server:
+  become-online: "&c[Admin] &7[<name>]&a Adding this server to the online list&2✔"
+  become-offline: "&c[Admin] &7[<name>]&c Removing this server from the online list&4⚠"
+
+player:
+  joined-network: "&7[S] &3&l<player> &7has joined &f<server>"
+  left-network: "&7[S] &3&l<player> &7has left &f<server>"
+  switched-server: "&7[S] &3&l<player> &7has joined &f<to> &7from &f<from>"
